@@ -1,0 +1,17 @@
+{
+  "name": "johan.satge.me",
+  "version": "1.0.0",
+  "author": "Johan Satgé",
+  "description": "https://johan.satge.me",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "private": true,
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johansatge/johan.satge.me"
+  },
+  "license": "MIT"
+}
