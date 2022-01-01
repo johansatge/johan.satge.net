@@ -1,12 +1,10 @@
 const fs = require('fs')
 const fsp = require('fs').promises
 const path = require('path')
-const http = require('http')
-const { networkInterfaces } = require('os')
+const { startLocalServer } = require('./server.js')
 
 const srcPath = path.join(__dirname, 'src')
 const distPath = path.join(__dirname, 'dist')
-const localPort = 8789
 
 build()
 if (process.argv.includes('--watch')) {
@@ -40,6 +38,9 @@ async function buildOnChange() {
 }
 
 async function makeDist() {
+  try {
+    await fsp.rm(distPath, { recursive: true })
+  } catch(error) {}
   await fsp.mkdir(distPath, { recursive: true })
 }
 
@@ -81,59 +82,3 @@ async function writeRobots() {
     await fsp.copyFile(path.join(srcPath, 'robots.txt'), path.join(distPath, 'robots.txt'))
 }
 
-async function startLocalServer() {
-  try {
-    const server = http.createServer()
-    server.on('request', onLocalServerRequest)
-    server.on('error', onLocalServerError)
-    server.listen(localPort)
-    if (server.listening) {
-      printLocalIps()
-    }
-  } catch(error) {
-    console.log(`Server could not start: ${error.message}`)
-  }
-}
-
-async function onLocalServerRequest(request, response) {
-  try {
-    if (request.method !== 'GET') {
-      throw new Error(`Invalid method ${request.method}`)
-    }
-    const requestPath = request.url === '/' ? 'index.html' : request.url
-    const contents = await fsp.readFile(path.join(distPath, requestPath))
-    response.writeHead(200, { 'Content-Type': getMimeType(requestPath) })
-    response.end(contents)
-  } catch(error) {
-    response.writeHead(500, { 'Content-Type': 'text/plain' })
-    response.end(`An error occurred: ${error.message}\n(${error.stack})`)
-  }
-}
-
-function getMimeType(requestPath) {
-  const types = {
-    html: 'text/html',
-    woff: 'font/woff',
-    woff2: 'font/woff2',
-    js: 'application/javascript',
-    json: 'application/json',
-  }
-  const ext = requestPath.substring(requestPath.lastIndexOf('.') + 1)
-  return types[ext] || 'text/plain'
-}
-
-function onLocalServerError(error) {
-  console.log(`A server error occurred: ${color(error.message, 'red')}`)
-  process.exitCode = 1
-}
-
-function printLocalIps() {
-  const nets = networkInterfaces()
-  for (const name of Object.keys(nets)) {
-    for (const net of nets[name]) {
-      if (net.family === 'IPv4') {
-        console.log(`Serving http://${net.address}:${localPort}`)
-      }
-    }
-  }
-}
