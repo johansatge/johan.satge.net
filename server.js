@@ -1,13 +1,16 @@
+// eslint-disable no-console
+
 const path = require('path')
+const fsp = require('fs').promises
 const http = require('http')
 const { networkInterfaces } = require('os')
+
+const serverPort = 8789
+const serverPath = path.join(__dirname, 'dist')
 
 module.exports = {
   startLocalServer,
 }
-
-const serverPort = 8789
-const serverPath = path.join(__dirname, 'dist')
 
 async function startLocalServer() {
   try {
@@ -18,7 +21,7 @@ async function startLocalServer() {
     if (server.listening) {
       printLocalIps()
     }
-  } catch(error) {
+  } catch (error) {
     console.log(`Server could not start: ${error.message}`)
   }
 }
@@ -28,17 +31,24 @@ async function onLocalServerRequest(request, response) {
     if (request.method !== 'GET') {
       throw new Error(`Invalid method ${request.method}`)
     }
-    const requestPath = request.url === '/' ? 'index.html' : request.url
+    const requestPath = getRequestPath(request.url)
     const contents = await fsp.readFile(path.join(serverPath, requestPath))
     response.writeHead(200, {
       'Content-Type': getMimeType(requestPath),
       'Cache-Control': 'no-cache, no-store',
     })
     response.end(contents)
-  } catch(error) {
+  } catch (error) {
     response.writeHead(500, { 'Content-Type': 'text/plain' })
     response.end(`An error occurred: ${error.message}\n(${error.stack})`)
   }
+}
+
+function getRequestPath(requestUrl) {
+  const specialUrls = {
+    '/': 'index.html',
+  }
+  return specialUrls[requestUrl] || requestUrl
 }
 
 function getMimeType(requestPath) {
@@ -48,6 +58,8 @@ function getMimeType(requestPath) {
     woff2: 'font/woff2',
     js: 'application/javascript',
     json: 'application/json',
+    png: 'image/png',
+    jpg: 'image/jpeg',
   }
   const ext = requestPath.substring(requestPath.lastIndexOf('.') + 1)
   return types[ext] || 'text/plain'
