@@ -56,10 +56,10 @@ async function getStyles() {
 }
 
 async function getScripts() {
-  let css = await fsp.readFile(path.join(srcPath, 'scripts.js'), 'utf8')
-  css = css.replace(/\n/g, ';')
-  css = css.replace(/ {2,}/g, '')
-  return css
+  let js = await fsp.readFile(path.join(srcPath, 'scripts.js'), 'utf8')
+  js = js.replace(/\n/g, ';')
+  js = js.replace(/ {2,}/g, '')
+  return js
 }
 
 async function writeHtml({ html, styles, scripts }) {
