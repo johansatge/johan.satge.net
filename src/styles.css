@@ -12,6 +12,7 @@
   --color-violet: #d860f0;
   --color-green: #52ac3f;
   --color-crayonblue: #5a91ee;
+  --color-red: #f23b32;
 }
 
 @font-face {
@@ -236,4 +237,12 @@ body::after {
 
 .link--crayonblue:after {
   border-color: var(--color-crayonblue);
+}
+
+.link--red {
+  color:  var(--color-red);
+}
+
+.link--red:after {
+  border-color: var(--color-red);
 }
