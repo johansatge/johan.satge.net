@@ -1,14 +1,18 @@
 const fs = require('fs')
 const fsp = require('fs').promises
 const path = require('path')
-const { startLocalServer } = require('./server.js')
 
 const srcPath = path.join(__dirname, 'src')
 const distPath = path.join(__dirname, 'dist')
 
 build()
 if (process.argv.includes('--watch')) {
-  startLocalServer()
+  const httpdir = require('/usr/local/lib/node_modules/httpdir')
+  const server = httpdir.createServer({ basePath: 'dist', httpPort: 8789 })
+  server.onStart(({ urls }) => {
+    console.log(urls.join('\n'))
+  })
+  server.start()
   buildOnChange()
 }
 
