@@ -27,6 +27,7 @@ async function build() {
     })
     await writeFonts()
     await writeRobots()
+    await writeHeaders()
     console.log(`Built (${Date.now() - startMs}ms)`)
   } catch (error) {
     console.log(`Build error: ${error.message} (${error.stack})`)
@@ -83,6 +84,9 @@ async function writeFonts() {
 }
 
 async function writeRobots() {
-    await fsp.copyFile(path.join(srcPath, 'robots.txt'), path.join(distPath, 'robots.txt'))
+  await fsp.copyFile(path.join(srcPath, 'robots.txt'), path.join(distPath, 'robots.txt'))
 }
 
+async function writeHeaders() {
+  await fsp.copyFile(path.join(srcPath, '_headers'), path.join(distPath, '_headers'))
+}
