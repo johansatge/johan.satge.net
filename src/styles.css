@@ -89,6 +89,14 @@ body::before {
   100% { transform: scale(1);   opacity: 1; }
 }
 
+@keyframes emoji-wiggle {
+  0%   { transform: rotate(0deg); }
+  20%  { transform: rotate(-14deg); }
+  50%  { transform: rotate(16deg); }
+  80%  { transform: rotate(-8deg); }
+  100% { transform: rotate(0deg); }
+}
+
 .container {
   position: relative;
   z-index: 1;
@@ -158,8 +166,14 @@ body::before {
   text-decoration: none;
   font-weight: 600;
 }
+
 [js-emoji] {
   display: inline-block;
+  cursor: default;
+}
+
+.title:hover [js-emoji] {
+  animation: emoji-wiggle 500ms ease-in-out;
 }
 
 .link:after {
@@ -249,6 +263,9 @@ body::before {
     animation: none;
   }
   .emoji--pop {
+    animation: none;
+  }
+  .title:hover [js-emoji] {
     animation: none;
   }
   .link:after {
