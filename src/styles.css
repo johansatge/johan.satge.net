@@ -18,7 +18,7 @@
 @font-face {
   font-family: 'Lora';
   src: url('lora-bold.woff2') format('woff2'), url('lora-bold.woff') format('woff');
-  font-weight: normal;
+  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
@@ -39,7 +39,7 @@
   font-display: swap;
 }
 
-html, body, h1, h2, div, p, a, span {
+html, body, h1, div, p, a, span {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -60,51 +60,59 @@ html {
 
 body {
   min-height: 100%;
-  border-left: 20px solid var(--color-border);
-  border-right: 20px solid var(--color-border);
 }
-body::before,
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, var(--color-violet), var(--color-daily), var(--color-seagreen), var(--color-mango), var(--color-carrot));
+  z-index: 2;
+}
+
 body::after {
   content: "";
   position: fixed;
-  background: var(--color-border);
+  top: 6px;
   left: 0;
   width: 100%;
-  height: 20px;
-  z-index: 2;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--color-bg), transparent);
+  z-index: 1;
+  pointer-events: none;
 }
-body::before {
-  top: 0;
-}
-body::after {
-  bottom: 0;
-}
-@media screen and (max-width: 1000px) {
-  body {
-    border-left-width: 15px;
-    border-right-width: 15px;
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
   }
-  body::before,
-  body::after {
-    height: 15px;
-  }
-}
-@media screen and (max-width: 660px) {
-  body {
-    border-left-width: 10px;
-    border-right-width: 10px;
-  }
-  body::before,
-  body::after {
-    height: 10px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+@keyframes emoji-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes emoji-wiggle {
+  0%   { transform: rotate(0deg); }
+  20%  { transform: rotate(-14deg); }
+  50%  { transform: rotate(16deg); }
+  80%  { transform: rotate(-8deg); }
+  100% { transform: rotate(0deg); }
+}
+
 .container {
-  position: relative;
-  z-index: 1;
   max-width: 850px;
-  padding: 80px 50px 100px 50px;
+  padding: 60px 50px 80px 50px;
+  animation: page-enter 500ms ease-out both;
 }
 @media screen and (max-width: 1000px) {
   .container {
@@ -160,7 +168,6 @@ body::after {
     font-size: 20px;
     line-height: 28px;
     margin: 0 0 12px 0;
-    text-align: justify;
   }
 }
 
@@ -169,80 +176,54 @@ body::after {
   text-decoration: none;
   font-weight: 600;
 }
+
+[js-emoji] {
+  display: inline-block;
+  cursor: default;
+}
+
+.title:hover [js-emoji] {
+  animation: emoji-wiggle 500ms ease-in-out;
+}
+
 .link:after {
   position: absolute;
   content: '';
   width: 0;
   left: 50%;
   bottom: -3px;
-  border-bottom: 3px solid;
+  border-bottom: 3px solid currentColor;
+  transition: width 250ms, left 250ms;
 }
 .link:hover:after {
   width: 100%;
   left: 0;
-  transition: width 250ms, left 250ms;
 }
 
-.link--daily {
-  color: var(--color-daily);
+.link--daily     { color: var(--color-daily); }
+.link--seagreen  { color: var(--color-seagreen); }
+.link--mango     { color: var(--color-mango); }
+.link--carrot    { color: var(--color-carrot); }
+.link--violet    { color: var(--color-violet); }
+.link--green     { color: var(--color-green); }
+.link--crayonblue{ color: var(--color-crayonblue); }
+.link--red       { color: var(--color-red); }
+
+.emoji--pop {
+  animation: emoji-pop 400ms ease-out both;
 }
 
-.link--daily:after {
-  border-color: var(--color-daily);
-}
-
-.link--seagreen {
-  color: var(--color-seagreen);
-}
-
-.link--seagreen:after {
-  border-color: var(--color-seagreen);
-}
-
-.link--mango {
-  color: var(--color-mango);
-}
-
-.link--mango:after {
-  border-color: var(--color-mango);
-}
-
-.link--carrot {
-  color: var(--color-carrot);
-}
-
-.link--carrot:after {
-  border-color: var(--color-carrot);
-}
-
-.link--violet {
-  color: var(--color-violet);
-}
-
-.link--violet:after {
-  border-color: var(--color-violet);
-}
-
-.link--green {
-  color: var(--color-green);
-}
-
-.link--green:after {
-  border-color: var(--color-green);
-}
-
-.link--crayonblue {
-  color:  var(--color-crayonblue);
-}
-
-.link--crayonblue:after {
-  border-color: var(--color-crayonblue);
-}
-
-.link--red {
-  color:  var(--color-red);
-}
-
-.link--red:after {
-  border-color: var(--color-red);
+@media (prefers-reduced-motion: reduce) {
+  .container {
+    animation: none;
+  }
+  .emoji--pop {
+    animation: none;
+  }
+  .title:hover [js-emoji] {
+    animation: none;
+  }
+  .link:after {
+    transition: none;
+  }
 }
