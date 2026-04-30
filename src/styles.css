@@ -39,7 +39,7 @@
   font-display: swap;
 }
 
-html, body, h1, h2, div, p, a, span {
+html, body, h1, div, p, a, span {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -67,9 +67,21 @@ body::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 5px;
+  height: 6px;
   background: linear-gradient(to right, var(--color-violet), var(--color-daily), var(--color-seagreen), var(--color-mango), var(--color-carrot));
   z-index: 2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--color-bg), transparent);
+  z-index: 1;
+  pointer-events: none;
 }
 
 @keyframes page-enter {
@@ -98,8 +110,6 @@ body::before {
 }
 
 .container {
-  position: relative;
-  z-index: 1;
   max-width: 850px;
   padding: 60px 50px 80px 50px;
   animation: page-enter 500ms ease-out both;
@@ -182,7 +192,7 @@ body::before {
   width: 0;
   left: 50%;
   bottom: -3px;
-  border-bottom: 3px solid;
+  border-bottom: 3px solid currentColor;
   transition: width 250ms, left 250ms;
 }
 .link:hover:after {
@@ -190,69 +200,14 @@ body::before {
   left: 0;
 }
 
-.link--daily {
-  color: var(--color-daily);
-}
-
-.link--daily:after {
-  border-color: var(--color-daily);
-}
-
-.link--seagreen {
-  color: var(--color-seagreen);
-}
-
-.link--seagreen:after {
-  border-color: var(--color-seagreen);
-}
-
-.link--mango {
-  color: var(--color-mango);
-}
-
-.link--mango:after {
-  border-color: var(--color-mango);
-}
-
-.link--carrot {
-  color: var(--color-carrot);
-}
-
-.link--carrot:after {
-  border-color: var(--color-carrot);
-}
-
-.link--violet {
-  color: var(--color-violet);
-}
-
-.link--violet:after {
-  border-color: var(--color-violet);
-}
-
-.link--green {
-  color: var(--color-green);
-}
-
-.link--green:after {
-  border-color: var(--color-green);
-}
-
-.link--crayonblue {
-  color: var(--color-crayonblue);
-}
-
-.link--crayonblue:after {
-  border-color: var(--color-crayonblue);
-}
-
-.link--red {
-  color: var(--color-red);
-}
-
-.link--red:after {
-  border-color: var(--color-red);
-}
+.link--daily     { color: var(--color-daily); }
+.link--seagreen  { color: var(--color-seagreen); }
+.link--mango     { color: var(--color-mango); }
+.link--carrot    { color: var(--color-carrot); }
+.link--violet    { color: var(--color-violet); }
+.link--green     { color: var(--color-green); }
+.link--crayonblue{ color: var(--color-crayonblue); }
+.link--red       { color: var(--color-red); }
 
 .emoji--pop {
   animation: emoji-pop 400ms ease-out both;
