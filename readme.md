@@ -1,1 +1,1 @@
-My simple homepage, [johan.satge.me](https://johan.satge.me).
+My simple homepage, [johan.satge.net](https://johan.satge.net).

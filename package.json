@@ -1,12 +1,13 @@
 {
-  "name": "johan.satge.me",
+  "name": "johan.satge.net",
   "version": "1.0.0",
   "author": "Johan Satgé",
-  "description": "https://johan.satge.me",
+  "description": "https://johan.satge.net",
   "scripts": {
     "build": "node build.js",
     "watch": "node build.js --watch"
   },
+  "type": "module",
   "private": true,
   "keywords": [],
   "repository": {

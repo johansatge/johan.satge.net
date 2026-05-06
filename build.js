@@ -1,13 +1,12 @@
-const fs = require('fs')
-const fsp = require('fs').promises
-const path = require('path')
+import fs, { promises as fsp } from 'node:fs'
+import path from 'node:path'
 
-const srcPath = path.join(__dirname, 'src')
-const distPath = path.join(__dirname, 'dist')
+const srcPath = path.join(import.meta.dirname, 'src')
+const distPath = path.join(import.meta.dirname, 'dist')
 
 build()
 if (process.argv.includes('--watch')) {
-  const httpdir = require('/usr/local/lib/node_modules/httpdir')
+  const httpdir = await import('/usr/local/lib/node_modules/httpdir/src/server.js')
   const server = httpdir.createServer({ basePath: 'dist', httpPort: 8789 })
   server.onStart(({ urls }) => {
     console.log(urls.join('\n'))
@@ -34,7 +33,7 @@ async function build() {
   }
 }
 
-async function buildOnChange() {
+function buildOnChange() {
   console.log(`Watching ${srcPath}`)
   fs.watch(srcPath, { recursive: true }, (evtType, file) => {
     console.log(`Event ${evtType} on ${file}, building...`)
